@@ -176,4 +176,49 @@ function showMealInfo(mealData) {
         }
     }
 
+
     
+    mealEl.innerHTML = `
+        <h1>${mealData.strMeal}</h1>
+        <img
+            src="${mealData.strMealThumb}"
+            alt="${mealData.strMeal}"
+        />
+        <p>
+        ${mealData.strInstructions}
+        </p>
+        <h3>Ingredients:</h3>
+        <ul>
+            ${ingredients
+                .map(
+                    (ing) => `
+            <li>${ing}</li>
+            `
+                )
+                .join("")}
+        </ul>
+    `;
+
+    mealInfoEl.appendChild(mealEl);
+
+    // show the popup
+    mealPopup.classList.remove("hidden");
+}
+
+searchBtn.addEventListener("click", async () => {
+    // clean container
+    mealsEl.innerHTML = "";
+
+    const search = searchTerm.value;
+    const meals = await getMealsBySearch(search);
+
+    if (meals) {
+        meals.forEach((meal) => {
+            addMeal(meal);
+        });
+    }
+});
+
+popupCloseBtn.addEventListener("click", () => {
+    mealPopup.classList.add("hidden");
+});
